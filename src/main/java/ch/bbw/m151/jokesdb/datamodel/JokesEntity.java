@@ -1,32 +1,34 @@
 package ch.bbw.m151.jokesdb.datamodel;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import lombok.Data;
+import lombok.experimental.Accessors;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+import org.springframework.data.annotation.Version;
+
+import javax.persistence.*;
+import java.util.Date;
 
 @Entity
+@Accessors(chain = true)
+@Data
 @Table(name = "jokes")
 public class JokesEntity {
 
-	@Id
-	@GeneratedValue
-	int id;
+    @Id
+    @GeneratedValue
+    int id;
 
-	@Column(nullable = false)
-	String joke;
+    @Column(nullable = false)
+    String joke;
 
-	public JokesEntity setJoke(String joke) {
-		this.joke = joke;
-		return this;
-	}
+    @Version
+    private int version;
 
-	public int getId() {
-		return id;
-	}
+    @CreationTimestamp
+    private Date createdOn;
 
-	public String getJoke() {
-		return joke;
-	}
+    @UpdateTimestamp
+    private Date updatedOn;
+
 }
