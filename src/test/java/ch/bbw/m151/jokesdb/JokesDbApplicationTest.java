@@ -15,28 +15,40 @@ import org.springframework.test.web.reactive.server.WebTestClient;
 @AutoConfigureMockMvc
 public class JokesDbApplicationTest implements WithAssertions {
 
-	@Autowired
-	JokesRepository jokesRepository;
+    @Autowired
+    JokesRepository jokesRepository;
 
-	@Autowired
-	private WebTestClient webTestClient;
+    @Autowired
+    private WebTestClient webTestClient;
 
-	@Test
-	void jokesAreLoadedAtStartup() {
-		var jokes = jokesRepository.findAll();
-		assertThat(jokes).hasSizeGreaterThan(100)
-				.allSatisfy(x -> assertThat(x.getJoke()).isNotEmpty());
-	}
+    @Test
+    void jokesAreLoadedAtStartup() {
+        var jokes = jokesRepository.findAll();
+        assertThat(jokes).hasSizeGreaterThan(100)
+                .allSatisfy(x -> assertThat(x.getJoke()).isNotEmpty());
+    }
 
-	@Test
-	void jokesCanBeRetrievedViaHttpGet() {
-		var pageSize = 5;
-		webTestClient.get()
-				.uri("/jokes?page={page}&size={size}", 1, pageSize)
-				.exchange()
-				.expectStatus()
-				.is2xxSuccessful()
-				.expectBodyList(JokesEntity.class)
-				.hasSize(pageSize);
-	}
+    @Test
+    void jokesCanBeRetrievedViaHttpGet() {
+        var pageSize = 5;
+        webTestClient.get()
+                .uri("/jokes?page={page}&size={size}", 1, pageSize)
+                .exchange()
+                .expectStatus()
+                .is2xxSuccessful()
+                .expectBodyList(JokesEntity.class)
+                .hasSize(pageSize);
+    }
+
+    @Autowired
+    RemoteJokesService remoteJokesService;
+
+    @Test
+    void teste() {
+        RemoteJokesService.JokeDTO joke = remoteJokesService.getJoke();
+        System.out.println(joke);
+        System.out.println(joke.getJoke());
+        System.out.println(joke.getDelivery());
+        System.out.println("NFFW: " + joke.getFlags());
+    }
 }
