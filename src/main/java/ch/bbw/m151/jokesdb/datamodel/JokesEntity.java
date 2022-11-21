@@ -7,7 +7,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.data.annotation.Version;
 
 import javax.persistence.*;
-import java.util.Date;
+import java.time.OffsetDateTime;
 
 @Entity
 @Accessors(chain = true)
@@ -19,16 +19,47 @@ public class JokesEntity {
     @GeneratedValue
     int id;
 
-    @Column(nullable = false)
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "ratings_id")
+    RatingsEntity ratingsId;
+
+    @Column(length = 500)
     String joke;
 
+    @Column
+    String category;
+    @Column
+    String type;
+    @Column
+    String setup;
+    @Column
+    String delivery;
+
+    @Column
+    boolean safe;
+
+    @Column
+    String lang;
+
+    @Column
+    boolean nsfw;
+    @Column
+    boolean religious;
+    @Column
+    boolean political;
+    @Column
+    boolean racist;
+    @Column
+    boolean sexist;
+    @Column
+    boolean explicit;
     @Version
     private int version;
 
     @CreationTimestamp
-    private Date createdOn;
+    private OffsetDateTime createdOn;
 
     @UpdateTimestamp
-    private Date updatedOn;
+    private OffsetDateTime updatedOn;
 
 }

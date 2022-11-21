@@ -45,10 +45,10 @@ public class JokesDbApplicationTest implements WithAssertions {
 
     @Test
     void teste() {
-        RemoteJokesService.JokeDTO joke = remoteJokesService.getJoke();
+        /*RemoteJokesService.JokeDTO joke = remoteJokesService.getJoke();
         System.out.println(joke);
         System.out.println(joke.getJoke());
         System.out.println(joke.getDelivery());
-        System.out.println("NFFW: " + joke.getFlags());
+        System.out.println("NFFW: " + joke.getFlags());*/
     }
 }

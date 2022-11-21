@@ -26,7 +26,7 @@ public class JokesService {
 
     @EventListener(ContextRefreshedEvent.class)
     public void preloadDatabase() {
-        if (jokesRepository.count() != 0) {
+      /*  if (jokesRepository.count() != 0) {
             log.info("database already contains data...");
             return;
         }
@@ -39,6 +39,6 @@ public class JokesService {
             jokesRepository.saveAll(jokes);
         } catch (IOException e) {
             throw new RuntimeException("failed reading jokes from classpath", e);
-        }
+        }*/
     }
 }
