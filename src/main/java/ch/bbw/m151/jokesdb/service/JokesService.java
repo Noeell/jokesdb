@@ -4,24 +4,27 @@ import ch.bbw.m151.jokesdb.datamodel.JokesEntity;
 import ch.bbw.m151.jokesdb.repository.JokesRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.context.event.EventListener;
-import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
 
-import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
+import java.util.List;
 
 @Service
 public class JokesService {
 
     private static final Logger log = LoggerFactory.getLogger(JokesService.class);
 
-    private final JokesRepository jokesRepository;
+    @Autowired
+    private JokesRepository jokesRepository;
 
-    public JokesService(JokesRepository jokesRepository) {
-        this.jokesRepository = jokesRepository;
+
+    public JokesEntity getOneJoke() {
+        List<JokesEntity> jokesEntities = jokesRepository.findAll();
+        int randomEntity = (int) (Math.random() * jokesEntities.size());
+
+        return jokesEntities.get(randomEntity);
     }
 
     @EventListener(ContextRefreshedEvent.class)
