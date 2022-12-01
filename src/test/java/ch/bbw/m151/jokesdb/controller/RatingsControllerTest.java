@@ -6,6 +6,7 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.ResponseEntity;
 
 @SpringBootTest
 class RatingsControllerTest implements WithAssertions {
@@ -25,7 +26,7 @@ class RatingsControllerTest implements WithAssertions {
     void checkSaveRating() {
         ratingsController.saveOrUpdateRating(5, 1);
 
-        assertThat(ratingsController.loadRating(1)).isEqualTo(5);
+        assertThat(ratingsController.loadRating(1)).isEqualTo(ResponseEntity.ok(5));
     }
 
     @Test
@@ -36,14 +37,13 @@ class RatingsControllerTest implements WithAssertions {
 
         assertThat(ratingsController.loadRating(jokeId))
                 .as("Check rating from jokeId '%s'", jokeId)
-                .isEqualTo(1);
+                .isEqualTo(ResponseEntity.ok(1));
     }
 
     @Test
     void checkLoadRatingWithUnknownJokeId() {
         assertThat(ratingsController.loadRating(1))
                 .as("Check rating from unknown jokeId, should be 10 by default")
-                .isEqualTo(10);
+                .isEqualTo(ResponseEntity.ok(10));
     }
-
 }

@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.HttpHeaders;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.reactive.server.WebTestClient;
 
@@ -24,31 +25,17 @@ public class JokesDbApplicationTest implements WithAssertions {
     @Test
     void jokesAreLoadedAtStartup() {
         var jokes = jokesRepository.findAll();
-        assertThat(jokes).hasSizeGreaterThan(100)
-                .allSatisfy(x -> assertThat(x.getJoke()).isNotEmpty());
+        assertThat(jokes).hasSizeGreaterThan(20);
     }
 
     @Test
     void jokesCanBeRetrievedViaHttpGet() {
-        var pageSize = 5;
         webTestClient.get()
-                .uri("/jokes?page={page}&size={size}", 1, pageSize)
+                .uri("/randomjoke")
+                .header(HttpHeaders.ACCEPT, "application/json")
                 .exchange()
-                .expectStatus()
-                .is2xxSuccessful()
+                .expectStatus().isOk()
                 .expectBodyList(JokesEntity.class)
-                .hasSize(pageSize);
-    }
-
-    @Autowired
-    RemoteJokesService remoteJokesService;
-
-    @Test
-    void teste() {
-        /*RemoteJokesService.JokeDTO joke = remoteJokesService.getJoke();
-        System.out.println(joke);
-        System.out.println(joke.getJoke());
-        System.out.println(joke.getDelivery());
-        System.out.println("NFFW: " + joke.getFlags());*/
+                .hasSize(1);
     }
 }
