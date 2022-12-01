@@ -17,11 +17,8 @@ public class JokesEntity {
 
     @Id
     @GeneratedValue
+    @Column(name = "id")
     int id;
-
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "ratings_id")
-    RatingsEntity ratingsId;
 
     @Column(length = 500)
     String joke;

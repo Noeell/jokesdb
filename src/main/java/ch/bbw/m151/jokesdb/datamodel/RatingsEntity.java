@@ -14,8 +14,11 @@ public class RatingsEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "id")
     int id;
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "jokes_id")
+    JokesEntity jokesId;
 
     int rating;
 

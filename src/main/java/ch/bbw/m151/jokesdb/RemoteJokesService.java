@@ -3,6 +3,8 @@ package ch.bbw.m151.jokesdb;
 import ch.bbw.m151.jokesdb.datamodel.JokesEntity;
 import ch.bbw.m151.jokesdb.repository.JokesRepository;
 import lombok.Data;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.context.event.EventListener;
@@ -18,6 +20,8 @@ import java.util.Objects;
 
 @Service
 public class RemoteJokesService {
+    private static final Logger log = LoggerFactory.getLogger(RemoteJokesService.class);
+
     @Autowired
     private JokesRepository jokesRepository;
 
@@ -80,9 +84,11 @@ public class RemoteJokesService {
                 jokesEntityList.add(jokesEntity);
             }
         }
+        log.info("Jokes successfully loaded");
     }
 
     public JokeDTO getJoke() {
+
         WebClient client = WebClient.create("https://v2.jokeapi.dev");
 
         WebClient.UriSpec<WebClient.RequestBodySpec> uriSpec = client.method(HttpMethod.GET);
