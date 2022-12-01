@@ -3,6 +3,7 @@ import {Col, Container, Row} from "react-bootstrap";
 import React, {useEffect, useState} from "react";
 import Loading from "./Loading";
 import {Button, Rating} from "@mui/material";
+import CachedIcon from '@mui/icons-material/Cached';
 
 function JokeOfTheDay() {
     const [joke, setJoke] = useState();
@@ -11,8 +12,11 @@ function JokeOfTheDay() {
     const [buttonPressed, setButtonPressed] = useState(false);
     const [rating, setRating] = useState(null);
 
-
     useEffect(() => {
+        loadJoke();
+    }, [])
+
+    function loadJoke() {
         fetch(`http://localhost:8080/randomjoke`, {
             "headers": {
                 "Accept": "application/json",
@@ -25,19 +29,42 @@ function JokeOfTheDay() {
         })
             .then(data => {
                 setIsPending(false);
+                loadRating(data.id);
                 setJoke(data);
                 setError(null);
             }).catch(err => {
             setIsPending(false);
             setError(err.message);
         })
-    }, [])
+    }
+
+    function loadRating(jokesId) {
+        setRating(null);
+        fetch(`http://localhost:8080/loadrating/${jokesId}`, {
+            "headers": {
+                "Accept": "application/json",
+            }
+        }).then(response => {
+            if (!response.ok) {
+                throw Error('could not fetch the data for that resource');
+            }
+            return response.json();
+        })
+            .then(data => {
+                if (data !== 10) {
+                    setRating(data);
+                }
+                setError(null);
+            }).catch(err => {
+            setError(err.message);
+        })
+    }
 
     function saveRating(newRating) {
         const requestOptions = {
             method: 'POST'
         };
-        fetch(`http://localhost:8080/saverating/${newRating}`, requestOptions)
+        fetch(`http://localhost:8080/saverating/${newRating}/${joke.id}`, requestOptions)
             .catch(err => {
                 setIsPending(false);
                 setError(err.message);
@@ -64,6 +91,13 @@ function JokeOfTheDay() {
                         <Button variant="outlined" onClick={() => setButtonPressed(true)}>Show more</Button>
                     }
                 </div>}
+                <br/>
+                <Button variant="contained" endIcon={<CachedIcon/>} onClick={() => {
+                    loadJoke();
+                    setButtonPressed(false);
+                }}>
+                    Load New Joke
+                </Button>
                 <br/><br/>
                 <h4>Rating:</h4>
                 <hr/>
