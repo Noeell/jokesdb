@@ -1,9 +1,10 @@
 spring:
-  main:
-    banner-mode: off
   datasource:
-    url: jdbc:h2:mem:mydb
-    driverClassName: org.h2.Driver
+    url: jdbc:postgresql://localhost:5432/localdb
+    username: localuser
+    password: localpass
+    driver-class-name: org.postgresql.Driver
   jpa:
-    show-sql: true
-    database-platform: org.hibernate.dialect.H2Dialect
+    hibernate.ddl-auto: create
+    database-platform: org.hibernate.dialect.PostgreSQL95Dialect
+    open-in-view: false
